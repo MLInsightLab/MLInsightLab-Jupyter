@@ -48,5 +48,3 @@ RUN groupadd -g 1004 mlil
 
 # Set the working directory
 WORKDIR /home
-
-CMD [ "sh", "/code/start_jupyter.sh" ]
