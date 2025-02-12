@@ -26,7 +26,7 @@ tf-keras
 torch
 
 # MLIL Python SDK
-mlinsightlab==0.0.11
+mlinsightlab==0.0.12
 
 # JupyterLab Extensions
 jupyterlab_iframe
