@@ -6,6 +6,9 @@ ipywidgets
 nbconvert
 jupyter
 
+# Database management/interaction
+psycopg2-binary
+
 # Wheel
 wheel
 

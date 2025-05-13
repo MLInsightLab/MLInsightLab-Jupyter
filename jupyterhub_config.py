@@ -344,7 +344,7 @@ c.JupyterHub.data_files_path = '/usr/local/share/jupyterhub'
 
 # url for the database. e.g. `sqlite:///jupyterhub.sqlite`
 #  Default: 'sqlite:///jupyterhub.sqlite'
-c.JupyterHub.db_url = 'sqlite:////jupyterhub_database/jupyterhub.sqlite'
+c.JupyterHub.db_url = f'postgresql://{os.environ["JUPYTER_POSTGRES_USER"]}:{os.environ["JUPYTER_POSTGRES_PASSWORD"]}@postgres-jupyter:5432/{os.environ["JUPYTER_POSTGRES_DB"]}'
 
 # log all database transactions. This has A LOT of output
 #  Default: False

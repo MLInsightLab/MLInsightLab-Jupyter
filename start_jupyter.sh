@@ -13,4 +13,5 @@ chmod 1777 /data
 service cron restart
 
 # Start JupyterHub
+jupyterhub upgrade-db
 jupyterhub -f /srv/jupyter/jupyterhub_config.py --ip 0.0.0.0
