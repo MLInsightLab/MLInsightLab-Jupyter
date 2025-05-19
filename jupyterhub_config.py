@@ -1438,7 +1438,11 @@ def pre_spawn_hook(spawner):
         os.makedirs(user_directory, exist_ok=True)
 
         try:
+            # Change ownership of the user directory to the user
             shutil.chown(user_directory, username.lower(), username.lower())
+
+            # Link the notebook directory in the user's home directory
+            os.symlink('/notebooks', os.path.join('/home', username.lower(), 'notebooks'))
 
         except Exception:
             pass
@@ -1720,7 +1724,7 @@ c.Authenticator.delete_invalid_users = True
 #
 #          .. versionadded:: 5.0
 #  Default: False
-# c.Authenticator.manage_roles = False
+c.Authenticator.manage_roles = True
 
 # The prompt string for the extra OTP (One Time Password) field.
 #
