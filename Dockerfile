@@ -44,4 +44,4 @@ RUN chmod +x /code/start_jupyter.sh
 RUN groupadd -g 1004 mlil
 
 # Set the working directory
-WORKDIR /home
+WORKDIR /

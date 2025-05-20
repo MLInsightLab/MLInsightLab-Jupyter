@@ -4,6 +4,7 @@ jupyterhub
 jupyterlab
 ipywidgets
 nbconvert
+notebook
 jupyter
 
 # Database management/interaction
@@ -35,3 +36,7 @@ mlinsightlab
 jupyterlab_iframe
 lckr_jupyterlab_variableinspector
 jupyter-resource-usage
+
+# Marimo
+jupyter-marimo-proxy
+marimo
