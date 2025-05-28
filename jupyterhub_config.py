@@ -1442,7 +1442,8 @@ def pre_spawn_hook(spawner):
             shutil.chown(user_directory, username.lower(), username.lower())
 
             # Link the notebook directory in the user's home directory
-            os.symlink('/notebooks', os.path.join('/home', username.lower(), 'notebooks'))
+            os.symlink('/notebooks', os.path.join('/home',
+                       username.lower(), 'notebooks'))
 
         except Exception:
             pass
