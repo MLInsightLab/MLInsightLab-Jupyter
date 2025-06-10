@@ -1,9 +1,9 @@
-FROM python:3.12
+FROM python:3.12-slim
 
 # Update software
 RUN apt update && apt upgrade -y && apt autoremove -y && \
     apt install git emacs htop tmux sudo cron less zip unzip -y && \
-    apt install -y ca-certificates curl gnupg && \
+    apt install -y ca-certificates curl gnupg build-essential && \
     mkdir -p /etc/apt/keyrings && \
     curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | gpg --dearmor -o /etc/apt/keyrings/nodesource.gpg && \
     echo "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_20.x nodistro main" | sudo tee /etc/apt/sources.list.d/nodesource.list && \
