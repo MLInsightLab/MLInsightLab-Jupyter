@@ -1,6 +1,6 @@
 {% extends "page.html" %}
 {% block title %}
-  MLInsightLab - Login
+  ML Insight Lab
 {% endblock title %}
 
 {% block stylesheet %}
@@ -8,78 +8,107 @@
   <style>
     /* Custom styles for the login page */
     #login-main {
-      background-color: #ffffff; 
-      border: 1px solid #ffffff; 
-      border-radius: 8px; 
-      box-shadow: 0 4px 8px #ffffff; 
+      /* This container primarily centers the form and sets its max-width.
+         The visual styling (background, border, shadow) is applied directly to the form. */
+      background-color: transparent; /* Ensures no default background */
       max-width: 400px;
       margin: 0 auto;
-      padding: 20px;
+      padding: 0; /* No padding here; form will handle its own */
     }
 
+    /* Styles for the actual login form container */
+    #login-main form {
+      background-color: #ffffff;
+      border: 1px solid #e0e0e0; /* A subtle light gray border */
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* A standard, subtle shadow */
+      padding-bottom: 20px; /* Space at the bottom of the form content */
+    }
+
+    .auth-form-header {
+      background-color: var(--primary-color); /* Uses the primary color from custom.css */
+      padding: 20px 0; /* Vertical padding for the header */
+      border-top-left-radius: 8px;
+      border-top-right-radius: 8px;
+      margin-bottom: 20px; /* Space between header and form fields */
+    }
+    
     .auth-form-header h2 {
       font-size: 24px;
-      margin-bottom: 20px;
-      color: #ffffff; /* Brand Color */
+      margin: 0; /* Removes default margin from h2 */
+      color: var(--navbar-text); /* Uses the white text color from custom.css */
       text-align: center;
     }
 
     .auth-form-body {
-      padding: 10px;
+      padding: 0 20px; /* Horizontal padding for the form fields */
     }
 
     .auth-form-body label {
       display: block;
       margin-bottom: 5px;
-      color: #333; /* Dark Gray Text */
+      color: var(--text-color); /* Uses the main text color from custom.css */
+      font-weight: 500; /* Makes labels slightly bolder */
     }
 
     .form-control {
-      border: 1px solid #333;
-      border-radius: 8px; /* Rounded Corners */
+      border: 1px solid var(--background-dark); /* Uses a subtle dark background color for borders */
+      border-radius: 8px; /* Rounded corners for inputs */
       padding: 10px;
       font-size: 16px;
       margin-bottom: 15px;
-      background-color: #ffffff;
+      width: 100%; /* Makes input fields take full width */
+      box-sizing: border-box; /* Ensures padding and border are included in the element's total width */
+    }
+
+    .form-control:focus {
+        border-color: var(--secondary-color); /* Highlights border on focus */
+        box-shadow: 0 0 0 0.25rem rgba(74, 144, 226, 0.25); /* Adds a subtle glow on focus */
+        outline: none;
     }
 
     .feedback-container {
       text-align: center;
+      margin-top: 20px; /* Space above the submit button */
     }
 
     .feedback-widget {
-      display: none;
+      display: none; /* Hidden by default */
       margin-left: 10px;
       font-size: 24px;
-      color: #4a90e2; /* Brand Color */
+      color: var(--primary-color); /* Uses the primary brand color */
     }
 
     #login_submit {
-      background-color: #4a90e2; /* Brand Color */
-      color: #ffffff; /* White Text */
+      background-color: var(--button-primary-bg); /* Uses the primary button background color */
+      color: var(--navbar-text); /* White text for the button */
       border: none;
-      border-radius: 4px; /* Rounded Corners */
-      padding: 10px;
+      border-radius: 4px; /* Rounded corners for the button */
+      padding: 10px 20px; /* Padding for the button */
       cursor: pointer;
       font-size: 16px;
-      transition: background-color 0.3s;
+      transition: background-color 0.3s ease; /* Smooth transition on hover */
+      width: 100%; /* Makes the button take full width */
     }
 
     #login_submit:hover {
-      background-color: #357ABD; /* Darker Shade of Brand Color */
+      background-color: var(--button-primary-hover-bg); /* Darker shade on hover */
     }
 
     #login_terms {
-      margin-top: 10px;
+      margin-top: 15px; /* Adjusts top margin */
       font-size: 14px;
+      text-align: left; /* Aligns text to the left */
+      padding: 0 20px; /* Matches horizontal padding with auth-form-body */
     }
 
     #login_terms_checkbox {
-      margin-right: 5px;
+      margin-right: 8px; /* Space between checkbox and text */
+      vertical-align: middle; /* Aligns checkbox with text */
     }
 
     .login_terms a {
-      color: #4a90e2; /* Brand Color */
+      color: var(--secondary-color); /* Uses the secondary brand color for links */
       text-decoration: none;
     }
 
@@ -87,6 +116,12 @@
       text-decoration: underline;
     }
 
+    .login_error {
+      color: #dc3545; /* Standard red for error messages */
+      margin-bottom: 15px;
+      text-align: center;
+      font-weight: 500;
+    }
 
     .hidden {
       display: none !important;
