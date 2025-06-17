@@ -925,7 +925,7 @@ c.JupyterHub.spawner_class = 'jupyterhub.spawner.LocalProcessSpawner'
 
 # Paths to search for jinja templates, before using the default templates.
 #  Default: []
-c.JupyterHub.template_paths = ['/srv/jupyter/templates']
+# c.JupyterHub.template_paths = ['/srv/jupyter/templates']
 
 # Extra variables to be passed into jinja templates.
 #
@@ -946,7 +946,9 @@ c.JupyterHub.template_paths = ['/srv/jupyter/templates']
 #                  "key2": callable_value,
 #              }
 #  Default: {}
-# c.JupyterHub.template_vars = {}
+c.JupyterHub.template_vars = {
+    'logo_url': '/jupyter/hub/static/images/logo.png'
+}
 
 # Extra settings overrides to pass to the tornado application.
 #  Default: {}

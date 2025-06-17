@@ -40,6 +40,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     {% block stylesheet %}
       <link rel="stylesheet" href="{{ static_url("css/style.min.css") }}" type="text/css" />
+      {# Custom CSS - this should override default styles #}
+      <link rel="stylesheet" href="{{ static_url("css/custom.css", include_version=True) }}" type="text/css" />
     {% endblock stylesheet %}
     {% block favicon %}
       <link rel="icon" href="{{ static_url("favicon.ico") }}" type="image/x-icon">
@@ -105,8 +107,13 @@
         <div class="container-fluid">
           {% block logo %}
             <span id="branding-logo" class="navbar-brand">
-              <a href="{{ logo_url or base_url }}">
-                ML Insight Lab
+              <a href="{{ base_url }}">
+                {# Display image if logo_url is set, otherwise display text #}
+                {% if logo_url %}
+                  <img src="{{ logo_url }}" alt="ML Insight Lab Logo">
+                {% endif %}
+                {# Always include the text for accessibility/fallback, hide with CSS if image is present #}
+                <span>ML Insight Lab</span>
               </a>
             </span>
           {% endblock logo %}
