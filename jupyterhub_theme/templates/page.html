@@ -44,7 +44,7 @@
       <link rel="stylesheet" href="{{ static_url("css/custom.css", include_version=True) }}" type="text/css" />
     {% endblock stylesheet %}
     {% block favicon %}
-      <link rel="icon" href="{{ static_url("favicon.ico") }}" type="image/x-icon">
+      <link rel="icon" href="{{ logo_url }}" type="image/x-icon">
     {% endblock favicon %}
     {% block scripts %}
       <script src="{{ static_url("components/bootstrap/dist/js/bootstrap.bundle.min.js") }}" type="text/javascript" charset="utf-8"></script>
@@ -170,7 +170,7 @@
                 {% block logout_widget %}
                 <span id="logout_widget">
                 {% if user %}
-                    <span class="navbar-text me-1">{{ user.name }}</span>
+                    <span class="navbar-text me-1"></span>
                         <a id="logout"
                             role="button"
                             class="btn btn-sm btn-outline-dark"
