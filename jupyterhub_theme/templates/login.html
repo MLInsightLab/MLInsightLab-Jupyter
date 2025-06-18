@@ -9,43 +9,39 @@
   <style>
     /* Custom styles for the login page */
     #login-main {
-      /* This container primarily centers the form and sets its max-width.
-      The visual styling (background, border, shadow) is applied directly to the form. */
-      background-color: transparent; /* Ensures no default background */
-      max-width: 30%; /* Increased max-width for a larger box */
-      margin: auto; /* Changed to 'auto' to horizontally center the block element */
-      padding: 0; /* No padding here; form will handle its own */
-      align-items: center; /* Vertically centers the content within the flex container */
-      justify-content: center; /* Horizontally centers the content within the flex container */
-      min-height: calc(100vh - var(--header-height, 0px) - var(--footer-height, 0px)); /* Occupy full viewport height minus header/footer if they exist */
+      background-color: transparent;
+      max-width: 30%;
+      margin: auto;
+      padding: 0;
+      align-items: center;
+      justify-content: center;
+      min-height: calc(100vh - var(--header-height, 0px) - var(--footer-height, 0px));
       padding-top: 10vh;
     }
 
-    /* Styles for the actual login form container */
     #login-main form {
       background-color: #ffffff;
       border-radius: 8px;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* A standard, subtle shadow */
-      width: 100%; /* Ensures the form takes the full width of its parent (#login-main) */
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      width: 100%;
     }
 
     .auth-form-header {
-      background: var(--primary-color) !important; /* Uses the primary color from custom.css */
-      /*padding: 50px 0; /* Vertical padding for the header */
+      background: var(--primary-color) !important;
       border-top-left-radius: 8px;
       border-top-right-radius: 8px;
-      margin-bottom: 10px; /* Space between header and form fields */
+      margin-bottom: 10px;
     }
-    
+
     .auth-form-header h2 {
       font-size: 24px;
-      margin: 0; /* Removes default margin from h2 */
-      color: var(--navbar-text); /* Uses the white text color from custom.css */
+      margin: 0;
+      color: var(--navbar-text);
       text-align: center;
     }
 
     .auth-form-body {
-      padding: 0 20px; /* Horizontal padding for the form fields */
+      padding: 0 20px;
     }
 
     .auth-form-body h4 {
@@ -56,69 +52,69 @@
     .auth-form-body label {
       display: block;
       margin-bottom: 5px;
-      color: var(--text-color); /* Uses the main text color from custom.css */
-      font-weight: 500; /* Makes labels slightly bolder */
+      color: var(--text-color);
+      font-weight: 500;
     }
 
     .form-control {
-      border-radius: 8px; /* Rounded corners for inputs */
+      border-radius: 8px;
       padding: 10px;
       font-size: 16px;
       margin-bottom: 15px;
-      width: 100%; /* Makes input fields take full width */
-      box-sizing: border-box; /* Ensures padding and border are included in the element's total width */
+      width: 100%;
+      box-sizing: border-box;
       text-align: center;
       background-color: #f4f4f4;
     }
 
     .form-control:focus {
-        border-color: var(--secondary-color); /* Highlights border on focus */
-        box-shadow: 0 0 0 0.25rem rgba(74, 144, 226, 0.25); /* Adds a subtle glow on focus */
-        outline: none;
+      border-color: var(--secondary-color);
+      box-shadow: 0 0 0 0.25rem rgba(74, 144, 226, 0.25);
+      outline: none;
     }
 
     .feedback-container {
       text-align: center;
-      margin-top: 20px; /* Space above the submit button */
+      margin-top: 20px;
     }
 
     .feedback-widget {
-      display: none; /* Hidden by default */
+      display: none;
       margin-left: 10px;
       font-size: 24px;
-      color: var(--primary-color); /* Uses the primary brand color */
+      color: var(--primary-color);
     }
 
     #login_submit {
-      background-color: var(--button-primary-bg); /* Uses the primary button background color */
-      color: var(--navbar-text); /* White text for the button */
+      background-color: var(--button-primary-bg);
+      color: var(--navbar-text);
       border: none;
-      border-radius: 4px; /* Rounded corners for the button */
-      padding: 10px 20px; /* Padding for the button */
+      border-radius: 4px;
+      padding: 10px 20px;
       cursor: pointer;
       font-size: 16px;
-      transition: background-color 0.3s ease; /* Smooth transition on hover */
-      width: 100%; /* Makes the button take full width */
+      transition: background-color 0.3s ease;
+      width: 100%;
     }
 
     #login_submit:hover {
-      background-color: var(--button-primary-hover-bg); /* Darker shade on hover */
+      background-color: var(--button-primary-hover-bg);
     }
 
     #login_terms {
-      margin-top: 15px; /* Adjusts top margin */
+      margin-top: 15px;
       font-size: 14px;
-      text-align: left; /* Aligns text to the left */
-      padding: 0 20px; /* Matches horizontal padding with auth-form-body */
+      text-align: left;
+      padding: 0 20px;
     }
 
     #login_terms_checkbox {
-      margin-right: 8px; /* Space between checkbox and text */
-      vertical-align: middle; /* Aligns checkbox with text */
+      margin-right: 8px;
+      vertical-align: middle;
     }
 
     .login_terms a {
-      color: var(--secondary-color); /* Uses the secondary brand color for links */
+      color: var(--secondary-color);
       text-decoration: none;
     }
 
@@ -127,7 +123,7 @@
     }
 
     .login_error {
-      color: #dc3545; /* Standard red for error messages */
+      color: #dc3545;
       margin-bottom: 15px;
       text-align: center;
       font-weight: 500;
@@ -150,12 +146,11 @@
              class='btn btn-jupyter btn-lg'
              href='{{ authenticator_login_url | safe }}'>Sign in with {{ login_service }}</a>
         </div>
-      {% else %} {# This 'else' block handles standard username/password or token login #}
-        {# Initial hidden state for the form until we determine if token login is possible #}
-        <div id="password-login-form" class="hidden"> 
+      {% else %}
+        <div id="password-login-form" class="hidden">
             <form action="{{ authenticator_login_url | safe }}"
-                    method="post"
-                    role="form">
+                  method="post"
+                  role="form">
                 <div class="auth-form-header">
                     <h2>Welcome to ML Insight Lab</h2>
                 </div>
@@ -171,13 +166,13 @@
                            class="form-control"
                            name="username"
                            val="{{ username }}"
-                           autofocus="autofocus" 
+                           autofocus="autofocus"
                            placeholder="Username"/>
                     <input type="password"
                            class="form-control"
                            autocomplete="current-password"
                            name="password"
-                           id="password_input" 
+                           id="password_input"
                            placeholder="Password"/>
                     {% if authenticator.request_otp %}
                         <label for='otp_input'>{{ authenticator.otp_prompt }}</label>
@@ -203,7 +198,6 @@
                                        name="login_terms_checkbox"
                                        required />
                                 {% block login_terms_text %}
-                                    {# allow overriding the text #}
                                     By logging into the platform you accept the <a href="{{ login_term_url }}">terms and conditions</a>.
                                 {% endblock login_terms_text %}
                             </div>
@@ -212,17 +206,15 @@
                 </div>
             </form>
         </div>
-        
-        {# Placeholder for a loading message for token login attempt #}
+
         <div id="token-login-status" style="text-align: center; padding: 20px;">
           <p>Attempting to log in with stored credentials...</p>
           <i class="fa fa-spinner fa-pulse fa-3x" style="color: var(--primary-color);"></i>
         </div>
-      {% endif %} {# This endif correctly closes the 'if custom_html' block #}
+      {% endif %}
     {% endblock login_container %}
   </div>
 
-  {# All JavaScript for this page should be placed here #}
   <script type="text/javascript">
     document.addEventListener('DOMContentLoaded', function() {
       const username = localStorage.getItem('username');
@@ -230,18 +222,13 @@
       const passwordLoginForm = document.getElementById('password-login-form');
       const tokenLoginStatus = document.getElementById('token-login-status');
 
-      // Hide the password form and show the loading status by default
-      // This is crucial: the password form should *start* hidden,
-      // and only shown if token login fails or is not attempted.
       passwordLoginForm.classList.add('hidden');
       tokenLoginStatus.classList.remove('hidden');
 
-
       if (username && token) {
-        // Create a dynamic form to submit username and token
         const form = document.createElement('form');
         form.method = 'POST';
-        form.action = '{{ authenticator_login_url | safe }}'; // Adjust if your token login endpoint is different
+        form.action = '{{ authenticator_login_url | safe }}';
 
         const usernameInput = document.createElement('input');
         usernameInput.type = 'hidden';
@@ -251,40 +238,28 @@
 
         const tokenInput = document.createElement('input');
         tokenInput.type = 'hidden';
-        tokenInput.name = 'token'; // The name expected by your custom authenticator
+        tokenInput.name = 'token';
         tokenInput.value = token;
         form.appendChild(tokenInput);
 
         const xsrfInput = document.createElement('input');
         xsrfInput.type = 'hidden';
         xsrfInput.name = '_xsrf';
-        xsrfInput.value = '{{ xsrf }}'; // Pass the XSRF token
+        xsrfInput.value = '{{ xsrf }}';
         form.appendChild(xsrfInput);
 
-        // Append the form to the body and submit it
         document.body.appendChild(form);
         form.submit();
       } else {
-        // No stored token, show the username/password form
         tokenLoginStatus.classList.add('hidden');
         passwordLoginForm.classList.remove('hidden');
       }
-    });
 
-    // This script should be loaded after your form is rendered.
-    // If the token login attempt fails, JupyterHub will typically redirect back to the login page
-    // and provide a `login_error` variable in the Jinja context.
-    // The `{% if login_error %}` block in your HTML will then display the error.
-    // We explicitly re-show the password form if there's a login_error,
-    // as it implies the automatic token login failed or was invalid.
-    {% if login_error %}
-        // This block only runs if login_error is present in the Jinja context
-        document.addEventListener('DOMContentLoaded', function() {
-            const passwordLoginForm = document.getElementById('password-login-form');
-            const tokenLoginStatus = document.getElementById('token-login-status');
-            tokenLoginStatus.classList.add('hidden');
-            passwordLoginForm.classList.remove('hidden');
-        });
-    {% endif %}
+      {% if login_error %}
+        // Show form if token login failed and there's a login error
+        tokenLoginStatus.classList.add('hidden');
+        passwordLoginForm.classList.remove('hidden');
+      {% endif %}
+    });
   </script>
 {% endblock login %}
