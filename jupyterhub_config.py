@@ -192,27 +192,53 @@ c.JupyterHub.allow_named_servers = True
 class MLILAuthenticator(Authenticator):
     @gen.coroutine
     def authenticate(self, handler, data):
-        username = data['username']
-        password = data['password']
-        with requests.Session() as sess:
-            resp = sess.post(
-                f'{API_URL}/password/verify',
-                json={
-                    'username': username,
-                    'password': password
-                }
-            )
-        if resp.status_code == 200:
-            role = resp.json()
+        # First try to authenticate using a token
+        try:
+            username = data['username']
+            token = data['token']
+            with requests.Session() as sess:
+                resp = sess.post(
+                    f'{API_URL}/token/verify',
+                    json={
+                        'username': username,
+                        'token': token
+                    }
+                )
+            if resp.status_code == 200:
+                role = resp.json()
 
-            # Only allow the user to login if they are an admin or a data scientist
-            if role == 'admin':
-                return {
-                    'name': username,
-                    'admin': True
-                }
-            elif role == 'data_scientist':
-                return username
+                # Only allow the user to login if they are an admin or a data scientist
+                if role == 'admin':
+                    return {
+                        'name': username,
+                        'admin': True
+                    }
+                elif role == 'data_scientist':
+                    return username
+
+        # Fall back on username, password authentication
+        except Exception as e:
+            username = data['username']
+            password = data['password']
+            with requests.Session() as sess:
+                resp = sess.post(
+                    f'{API_URL}/password/verify',
+                    json={
+                        'username': username,
+                        'password': password
+                    }
+                )
+            if resp.status_code == 200:
+                role = resp.json()
+
+                # Only allow the user to login if they are an admin or a data scientist
+                if role == 'admin':
+                    return {
+                        'name': username,
+                        'admin': True
+                    }
+                elif role == 'data_scientist':
+                    return username
 
 
 c.JupyterHub.authenticator_class = MLILAuthenticator

@@ -150,65 +150,141 @@
              href='{{ authenticator_login_url | safe }}'>Sign in with {{ login_service }}</a>
         </div>
       {% else %}
-        <form action="{{ authenticator_login_url | safe }}"
-              method="post"
-              role="form">
-          <div class="auth-form-header">
-            <h2>Welcome to ML Insight Lab</h2>
-          </div>
-          <div class='auth-form-body'>
-            {% if login_error %}<p class="login_error">{{ login_error }}</p>{% endif %}
-            <h4>Log in to Access Jupyter</h4>
-            <input type="hidden" name="_xsrf" value="{{ xsrf }}" />
-            <input id="username_input"
-                   type="text"
-                   autocapitalize="off"
-                   autocorrect="off"
-                   autocomplete="username"
-                   class="form-control"
-                   name="username"
-                   val="{{ username }}"
-                   autofocus="autofocus" 
-                   placeholder="Username"/>
-            <input type="password"
-                   class="form-control"
-                   autocomplete="current-password"
-                   name="password"
-                   id="password_input" 
-                   placeholder="Password"/>
-            {% if authenticator.request_otp %}
-              <label for='otp_input'>{{ authenticator.otp_prompt }}</label>
-              <input class="form-control"
-                     autocomplete="one-time-password"
-                     name="otp"
-                     id="otp_input" />
-            {% endif %}
-            <div class="feedback-container">
-              <input id="login_submit"
-                     type="submit"
-                     value='Sign in'
-                     tabindex="3" />
-              <div class="feedback-widget">
-                <i class="fa fa-spinner fa-pulse"></i>
-              </div>
-            </div>
-            {% block login_terms %}
-              {% if login_term_url %}
-                <div id="login_terms" class="login_terms">
-                  <input type="checkbox"
-                         id="login_terms_checkbox"
-                         name="login_terms_checkbox"
-                         required />
-                  {% block login_terms_text %}
-                    {# allow overriding the text #}
-                    By logging into the platform you accept the <a href="{{ login_term_url }}">terms and conditions</a>.
-                  {% endblock login_terms_text %}
+        {# Initial hidden state for the form until we determine if token login is possible #}
+        <div id="password-login-form" class="hidden"> 
+            <form action="{{ authenticator_login_url | safe }}"
+                    method="post"
+                    role="form">
+                <div class="auth-form-header">
+                    <h2>Welcome to ML Insight Lab</h2>
                 </div>
-              {% endif %}
-            {% endblock login_terms %}
-          </div>
-        </form>
+                <div class='auth-form-body'>
+                    {% if login_error %}<p class="login_error">{{ login_error }}</p>{% endif %}
+                    <h4>Log in to Access Jupyter</h4>
+                    <input type="hidden" name="_xsrf" value="{{ xsrf }}" />
+                    <input id="username_input"
+                        type="text"
+                        autocapitalize="off"
+                        autocorrect="off"
+                        autocomplete="username"
+                        class="form-control"
+                        name="username"
+                        val="{{ username }}"
+                        autofocus="autofocus" 
+                        placeholder="Username"/>
+                    <input type="password"
+                        class="form-control"
+                        autocomplete="current-password"
+                        name="password"
+                        id="password_input" 
+                        placeholder="Password"/>
+                    {% if authenticator.request_otp %}
+                        <label for='otp_input'>{{ authenticator.otp_prompt }}</label>
+                        <input class="form-control"
+                            autocomplete="one-time-password"
+                            name="otp"
+                            id="otp_input" />
+                    {% endif %}
+                    <div class="feedback-container">
+                        <input id="login_submit"
+                            type="submit"
+                            value='Sign in'
+                            tabindex="3" />
+                        <div class="feedback-widget">
+                            <i class="fa fa-spinner fa-pulse"></i>
+                        </div>
+                    </div>
+                    {% block login_terms %}
+                        {% if login_term_url %}
+                            <div id="login_terms" class="login_terms">
+                                <input type="checkbox"
+                                    id="login_terms_checkbox"
+                                    name="login_terms_checkbox"
+                                    required />
+                                {% block login_terms_text %}
+                                    {# allow overriding the text #}
+                                    By logging into the platform you accept the <a href="{{ login_term_url }}">terms and conditions</a>.
+                                {% endblock login_terms_text %}
+                            </div>
+                        {% endif %}
+                    {% endblock login_terms %}
+                </div>
+            </form>
+        </div>
+        
+        {# Placeholder for a loading message for token login attempt #}
+        <div id="token-login-status" style="text-align: center; padding: 20px;">
+          <p>Attempting to log in with stored credentials...</p>
+          <i class="fa fa-spinner fa-pulse fa-3x" style="color: var(--primary-color);"></i>
+        </div>
       {% endif %}
     {% endblock login_container %}
   </div>
+
+  <script type="text/javascript">
+    document.addEventListener('DOMContentLoaded', function() {
+      const username = localStorage.getItem('username');
+      const token = localStorage.getItem('token');
+      const passwordLoginForm = document.getElementById('password-login-form');
+      const tokenLoginStatus = document.getElementById('token-login-status');
+
+      if (username && token) {
+        // Hide the password form and show the loading message
+        passwordLoginForm.classList.add('hidden');
+        tokenLoginStatus.classList.remove('hidden');
+
+        // Create a dynamic form to submit username and token
+        const form = document.createElement('form');
+        form.method = 'POST';
+        form.action = '{{ authenticator_login_url | safe }}'; // Adjust if your token login endpoint is different
+
+        const usernameInput = document.createElement('input');
+        usernameInput.type = 'hidden';
+        usernameInput.name = 'username';
+        usernameInput.value = username;
+        form.appendChild(usernameInput);
+
+        const tokenInput = document.createElement('input');
+        tokenInput.type = 'hidden';
+        tokenInput.name = 'token'; // The name expected by your custom authenticator
+        tokenInput.value = token;
+        form.appendChild(tokenInput);
+
+        const xsrfInput = document.createElement('input');
+        xsrfInput.type = 'hidden';
+        xsrfInput.name = '_xsrf';
+        xsrfInput.value = '{{ xsrf }}'; // Pass the XSRF token
+        form.appendChild(xsrfInput);
+
+        // Append the form to the body and submit it
+        document.body.appendChild(form);
+        form.submit();
+      } else {
+        // No stored token, show the username/password form
+        tokenLoginStatus.classList.add('hidden');
+        passwordLoginForm.classList.remove('hidden');
+        // If there's a login error from a previous attempt (e.g., token login failed),
+        // ensure the password form is visible and the error message is displayed.
+        {% if login_error %}
+            passwordLoginForm.classList.remove('hidden');
+            tokenLoginStatus.classList.add('hidden');
+        {% endif %}
+      }
+    });
+
+    // This script should be loaded after your form is rendered.
+    // If the token login attempt fails, JupyterHub will typically redirect back to the login page
+    // and provide a `login_error` variable in the Jinja context.
+    // The `{% if login_error %}` block in your HTML will then display the error.
+    // We explicitly re-show the password form if there's a login_error,
+    // as it implies the automatic token login failed or was invalid.
+    {% if login_error %}
+        document.addEventListener('DOMContentLoaded', function() {
+            const passwordLoginForm = document.getElementById('password-login-form');
+            const tokenLoginStatus = document.getElementById('token-login-status');
+            tokenLoginStatus.classList.add('hidden');
+            passwordLoginForm.classList.remove('hidden');
+        });
+    {% endif %}
+  </script>
 {% endblock login %}
