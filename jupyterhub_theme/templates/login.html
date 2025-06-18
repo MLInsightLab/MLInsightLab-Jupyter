@@ -1,4 +1,5 @@
 {% extends "page.html" %}
+
 {% block title %}
   ML Insight Lab
 {% endblock title %}
@@ -149,7 +150,7 @@
              class='btn btn-jupyter btn-lg'
              href='{{ authenticator_login_url | safe }}'>Sign in with {{ login_service }}</a>
         </div>
-      {% else %}
+      {% else %} {# This 'else' block handles standard username/password or token login #}
         {# Initial hidden state for the form until we determine if token login is possible #}
         <div id="password-login-form" class="hidden"> 
             <form action="{{ authenticator_login_url | safe }}"
@@ -163,33 +164,33 @@
                     <h4>Log in to Access Jupyter</h4>
                     <input type="hidden" name="_xsrf" value="{{ xsrf }}" />
                     <input id="username_input"
-                        type="text"
-                        autocapitalize="off"
-                        autocorrect="off"
-                        autocomplete="username"
-                        class="form-control"
-                        name="username"
-                        val="{{ username }}"
-                        autofocus="autofocus" 
-                        placeholder="Username"/>
+                           type="text"
+                           autocapitalize="off"
+                           autocorrect="off"
+                           autocomplete="username"
+                           class="form-control"
+                           name="username"
+                           val="{{ username }}"
+                           autofocus="autofocus" 
+                           placeholder="Username"/>
                     <input type="password"
-                        class="form-control"
-                        autocomplete="current-password"
-                        name="password"
-                        id="password_input" 
-                        placeholder="Password"/>
+                           class="form-control"
+                           autocomplete="current-password"
+                           name="password"
+                           id="password_input" 
+                           placeholder="Password"/>
                     {% if authenticator.request_otp %}
                         <label for='otp_input'>{{ authenticator.otp_prompt }}</label>
                         <input class="form-control"
-                            autocomplete="one-time-password"
-                            name="otp"
-                            id="otp_input" />
+                               autocomplete="one-time-password"
+                               name="otp"
+                               id="otp_input" />
                     {% endif %}
                     <div class="feedback-container">
                         <input id="login_submit"
-                            type="submit"
-                            value='Sign in'
-                            tabindex="3" />
+                               type="submit"
+                               value='Sign in'
+                               tabindex="3" />
                         <div class="feedback-widget">
                             <i class="fa fa-spinner fa-pulse"></i>
                         </div>
@@ -198,9 +199,9 @@
                         {% if login_term_url %}
                             <div id="login_terms" class="login_terms">
                                 <input type="checkbox"
-                                    id="login_terms_checkbox"
-                                    name="login_terms_checkbox"
-                                    required />
+                                       id="login_terms_checkbox"
+                                       name="login_terms_checkbox"
+                                       required />
                                 {% block login_terms_text %}
                                     {# allow overriding the text #}
                                     By logging into the platform you accept the <a href="{{ login_term_url }}">terms and conditions</a>.
@@ -217,10 +218,11 @@
           <p>Attempting to log in with stored credentials...</p>
           <i class="fa fa-spinner fa-pulse fa-3x" style="color: var(--primary-color);"></i>
         </div>
-      {% endif %}
+      {% endif %} {# This endif correctly closes the 'if custom_html' block #}
     {% endblock login_container %}
   </div>
 
+  {# All JavaScript for this page should be placed here #}
   <script type="text/javascript">
     document.addEventListener('DOMContentLoaded', function() {
       const username = localStorage.getItem('username');
@@ -228,11 +230,14 @@
       const passwordLoginForm = document.getElementById('password-login-form');
       const tokenLoginStatus = document.getElementById('token-login-status');
 
-      if (username && token) {
-        // Hide the password form and show the loading message
-        passwordLoginForm.classList.add('hidden');
-        tokenLoginStatus.classList.remove('hidden');
+      // Hide the password form and show the loading status by default
+      // This is crucial: the password form should *start* hidden,
+      // and only shown if token login fails or is not attempted.
+      passwordLoginForm.classList.add('hidden');
+      tokenLoginStatus.classList.remove('hidden');
 
+
+      if (username && token) {
         // Create a dynamic form to submit username and token
         const form = document.createElement('form');
         form.method = 'POST';
@@ -263,12 +268,6 @@
         // No stored token, show the username/password form
         tokenLoginStatus.classList.add('hidden');
         passwordLoginForm.classList.remove('hidden');
-        // If there's a login error from a previous attempt (e.g., token login failed),
-        // ensure the password form is visible and the error message is displayed.
-        {% if login_error %}
-            passwordLoginForm.classList.remove('hidden');
-            tokenLoginStatus.classList.add('hidden');
-        {% endif %}
       }
     });
 
@@ -279,6 +278,7 @@
     // We explicitly re-show the password form if there's a login_error,
     // as it implies the automatic token login failed or was invalid.
     {% if login_error %}
+        // This block only runs if login_error is present in the Jinja context
         document.addEventListener('DOMContentLoaded', function() {
             const passwordLoginForm = document.getElementById('password-login-form');
             const tokenLoginStatus = document.getElementById('token-login-status');

@@ -8,7 +8,6 @@ echo "export S3_ENDPOINT_URL=$S3_ENDPOINT_URL" > /etc/profile.d/s3.sh
 
 # Add read and write permissions to /notebooks and /data
 chmod 1777 /notebooks
-chmod 1777 /data
 
 # Start the cron service
 service cron restart
