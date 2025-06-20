@@ -147,66 +147,6 @@
              href='{{ authenticator_login_url | safe }}'>Sign in with {{ login_service }}</a>
         </div>
       {% else %}
-        <div id="password-login-form" class="hidden">
-            <form action="{{ authenticator_login_url | safe }}"
-                  method="post"
-                  role="form">
-                <div class="auth-form-header">
-                    <h2>Welcome to ML Insight Lab</h2>
-                </div>
-                <div class='auth-form-body'>
-                    {% if login_error %}<p class="login_error">{{ login_error }}</p>{% endif %}
-                    <h4>Log in to Access Jupyter</h4>
-                    <input type="hidden" name="_xsrf" value="{{ xsrf }}" />
-                    <input id="username_input"
-                           type="text"
-                           autocapitalize="off"
-                           autocorrect="off"
-                           autocomplete="username"
-                           class="form-control"
-                           name="username"
-                           val="{{ username }}"
-                           autofocus="autofocus"
-                           placeholder="Username"/>
-                    <input type="password"
-                           class="form-control"
-                           autocomplete="current-password"
-                           name="password"
-                           id="password_input"
-                           placeholder="Password"/>
-                    {% if authenticator.request_otp %}
-                        <label for='otp_input'>{{ authenticator.otp_prompt }}</label>
-                        <input class="form-control"
-                               autocomplete="one-time-password"
-                               name="otp"
-                               id="otp_input" />
-                    {% endif %}
-                    <div class="feedback-container">
-                        <input id="login_submit"
-                               type="submit"
-                               value='Sign in'
-                               tabindex="3" />
-                        <div class="feedback-widget">
-                            <i class="fa fa-spinner fa-pulse"></i>
-                        </div>
-                    </div>
-                    {% block login_terms %}
-                        {% if login_term_url %}
-                            <div id="login_terms" class="login_terms">
-                                <input type="checkbox"
-                                       id="login_terms_checkbox"
-                                       name="login_terms_checkbox"
-                                       required />
-                                {% block login_terms_text %}
-                                    By logging into the platform you accept the <a href="{{ login_term_url }}">terms and conditions</a>.
-                                {% endblock login_terms_text %}
-                            </div>
-                        {% endif %}
-                    {% endblock login_terms %}
-                </div>
-            </form>
-        </div>
-
         <div id="token-login-status" style="text-align: center; padding: 20px;">
           <p>Attempting to log in with stored credentials...</p>
           <i class="fa fa-spinner fa-pulse fa-3x" style="color: var(--primary-color);"></i>
@@ -217,12 +157,10 @@
 
   <script type="text/javascript">
     document.addEventListener('DOMContentLoaded', function() {
-      const username = localStorage.getItem('username');
-      const token = localStorage.getItem('token');
-      const passwordLoginForm = document.getElementById('password-login-form');
+      const username = localStorage.getItem('mlil-username');
+      const token = localStorage.getItem('mlil-token');
       const tokenLoginStatus = document.getElementById('token-login-status');
 
-      passwordLoginForm.classList.add('hidden');
       tokenLoginStatus.classList.remove('hidden');
 
       if (username && token) {
