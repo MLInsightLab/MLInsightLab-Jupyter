@@ -107,7 +107,7 @@
         <div class="container-fluid">
           {% block logo %}
             <span id="branding-logo" class="navbar-brand">
-              <a href="{{ base_url }}">
+              <a href="/">
                 {# Display image if logo_url is set, otherwise display text #}
                 {% if logo_url %}
                   <img src="{{ logo_url }}" alt="ML Insight Lab Logo">
@@ -167,17 +167,6 @@
             <ul class="nav navbar-nav me-2">
               {% block nav_bar_right_items %}
                 <li class="nav-item">
-                {% block logout_widget %}
-                <span id="logout_widget">
-                {% if user %}
-                    <span class="navbar-text me-1"></span>
-                        <a id="logout"
-                            role="button"
-                            class="btn btn-sm btn-outline-dark"
-                            href="{{ logout_url }}"> <i aria-hidden="true" class="fa fa-sign-out"></i> Logout</a>
-                    </span>
-                {% endif %}
-                {% endblock logout_widget %}
                 </li>
             {% endblock nav_bar_right_items %}
             </ul>

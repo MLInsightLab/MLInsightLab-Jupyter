@@ -251,14 +251,12 @@
         document.body.appendChild(form);
         form.submit();
       } else {
-        tokenLoginStatus.classList.add('hidden');
-        passwordLoginForm.classList.remove('hidden');
+        window.location.href = '/';
       }
 
       {% if login_error %}
         // Show form if token login failed and there's a login error
-        tokenLoginStatus.classList.add('hidden');
-        passwordLoginForm.classList.remove('hidden');
+        window.location.href = '/';
       {% endif %}
     });
   </script>
