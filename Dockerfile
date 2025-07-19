@@ -15,6 +15,9 @@ RUN apt update && apt upgrade -y && apt autoremove -y && \
 # Install configurable-http-proxy
 RUN npm install -g configurable-http-proxy
 
+# Install ollama
+RUN curl -fsSL https://ollama.com/install.sh | sh
+
 # Copy and install requirements.txt
 COPY requirements.txt /tmp/requirements.txt
 RUN pip install --no-cache-dir --upgrade pip uv && \

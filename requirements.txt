@@ -29,9 +29,6 @@ dask[complete]
 #tf-keras
 #torch
 
-# uv for package management
-uv
-
 # MLIL Python SDK
 mlinsightlab
 
@@ -43,3 +40,6 @@ jupyter-resource-usage
 # Marimo
 jupyter-marimo-proxy
 marimo
+
+# Ollama
+ollama
