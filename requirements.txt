@@ -20,14 +20,14 @@ mlflow[extras]
 dask[complete]
 
 # Machine learning packages
-#scikit-learn
-#transformers
-#bitsandbytes
-#torchvision
-#accelerate
-#tensorflow
-#tf-keras
-#torch
+scikit-learn
+transformers
+bitsandbytes
+torchvision
+accelerate
+tensorflow
+tf-keras
+torch
 
 # MLIL Python SDK
 mlinsightlab
