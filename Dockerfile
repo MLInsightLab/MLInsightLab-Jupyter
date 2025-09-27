@@ -26,9 +26,6 @@ RUN pip install --no-cache-dir --upgrade pip uv && \
 # Add sudo users to not require password for sudo
 RUN echo "%sudo ALL=(ALL:ALL) NOPASSWD: ALL" | sudo tee /etc/sudoers.d/root
 
-# Expose the port jupyter runs on
-EXPOSE 8000
-
 # Make the /srv/jupyter directory and move the config to that directory
 COPY jupyterhub_config.py /srv/jupyter/jupyterhub_config.py
 
