@@ -30,7 +30,7 @@ RUN pip install --no-cache-dir --upgrade pip uv && \
     uv pip install --system --no-cache-dir --upgrade -r /tmp/requirements.txt
 
 # Install ollama CLI
-RUN curl -fsSL https://ollama.com/install.sh | sh
+#RUN curl -fsSL https://ollama.com/install.sh | sh
 
 # Configure sudo to not require password
 RUN echo "%sudo ALL=(ALL:ALL) NOPASSWD: ALL" | tee /etc/sudoers.d/root
