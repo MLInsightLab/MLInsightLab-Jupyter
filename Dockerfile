@@ -1,48 +1,55 @@
-FROM python:3.12-slim
+############################
+# Stage 1: Node (LTS)
+############################
+FROM node:lts-slim AS node
 
-# Update software
-RUN apt update && apt upgrade -y && apt autoremove -y && \
-    apt install git emacs htop tmux sudo cron less zip unzip -y && \
-    apt install -y ca-certificates curl gnupg build-essential && \
-    mkdir -p /etc/apt/keyrings && \
-    curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | gpg --dearmor -o /etc/apt/keyrings/nodesource.gpg && \
-    echo "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_20.x nodistro main" | sudo tee /etc/apt/sources.list.d/nodesource.list && \
-    apt update && \
-    apt install nodejs -y && \
-    apt autoremove -y && \
-    rm -rf /var/lib/apt/lists/*
-
-# Install configurable-http-proxy
+# Install Configurable HTTP Proxy globally
 RUN npm install -g configurable-http-proxy
 
-# Install ollama
-RUN curl -fsSL https://ollama.com/install.sh | sh
+############################
+# Stage 2: Python runtime
+############################
+FROM python:3.12-slim
 
-# Copy and install requirements.txt
+# Install system packages
+RUN apt update && apt upgrade -y && apt autoremove -y && \
+    apt install -y \
+        git emacs htop tmux sudo cron less zip unzip \
+        ca-certificates curl gnupg build-essential && \
+    rm -rf /var/lib/apt/lists/*
+
+# Copy Node and npm from Node stage (fixes 'node: not found' for CHP)
+COPY --from=node /usr/local/ /usr/local/
+
+# Ensure npm global binaries are on PATH
+ENV PATH="/usr/local/lib/node_modules/.bin:${PATH}"
+
+# Copy Python requirements and install
 COPY requirements.txt /tmp/requirements.txt
 RUN pip install --no-cache-dir --upgrade pip uv && \
     uv pip install --system --no-cache-dir --upgrade -r /tmp/requirements.txt
 
-# Add sudo users to not require password for sudo
-RUN echo "%sudo ALL=(ALL:ALL) NOPASSWD: ALL" | sudo tee /etc/sudoers.d/root
+# Install ollama CLI
+RUN curl -fsSL https://ollama.com/install.sh | sh
 
-# Make the /srv/jupyter directory and move the config to that directory
+# Configure sudo to not require password
+RUN echo "%sudo ALL=(ALL:ALL) NOPASSWD: ALL" | tee /etc/sudoers.d/root
+
+# Create mlil group
+RUN groupadd -g 1004 mlil
+
+# Copy JupyterHub configuration
 COPY jupyterhub_config.py /srv/jupyter/jupyterhub_config.py
-
-# Copy the templates directory to the container's file system
 COPY jupyterhub_theme /usr/local/share/jupyterhub
-
-# Move the jupyterhub-singleuser.sh script to the /srv/jupyter directory and ensure it's executable
 COPY jupyterhub-singleuser.sh /srv/jupyter/jupyterhub-singleuser.sh
 RUN chmod +x /srv/jupyter/jupyterhub-singleuser.sh
 
-# Copy the start script and ensure it's executable
+# Copy start script
 COPY start_jupyter.sh /code/start_jupyter.sh
 RUN chmod +x /code/start_jupyter.sh
 
-# Add group mlil
-RUN groupadd -g 1004 mlil
-
-# Set the working directory
+# Set working directory
 WORKDIR /
 
+# Verify Node and npm are installed
+RUN node -v && npm -v
