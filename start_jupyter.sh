@@ -6,6 +6,7 @@ echo "export DASK_SCHEDULER_ADDRESS=$DASK_SCHEDULER_ADDRESS" > /etc/profile.d/da
 echo "export API_URL=$API_URL" > /etc/profile.d/api.sh
 echo "export S3_ENDPOINT_URL=$S3_ENDPOINT_URL" > /etc/profile.d/s3.sh
 echo "export OLLAMA_HOST=$OLLAMA_HOST" > /etc/profile.d/ollama.sh
+echo "export MLFLOW_DISABLE_TELEMETRY=$MLFLOW_DISABLE_TELEMETRY" > /etc/profile.d/mlflow_telemetry.sh
 
 # Add read and write permissions to /notebooks and /data
 chmod 1777 /notebooks
